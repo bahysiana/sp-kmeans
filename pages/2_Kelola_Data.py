@@ -280,3 +280,149 @@ if simpan:
     except Exception as e:
 
         st.error(e)
+
+
+# ==========================================
+# EDIT DATA
+# ==========================================
+
+from utils.database import (
+    update_data,
+    get_data_by_id
+)
+
+st.divider()
+st.subheader("✏️ Edit Data")
+
+data_db = get_all_data()
+
+if not data_db.empty:
+
+    selected_id = st.selectbox(
+        "Pilih ID yang akan diedit",
+        data_db["id"].tolist()
+    )
+
+    row = get_data_by_id(selected_id)
+
+    if row:
+
+        with st.form("form_edit"):
+
+            username_edit = st.text_input(
+                "Username",
+                value=row[1]
+            )
+
+            menu_edit = st.text_input(
+                "Menu",
+                value=row[2]
+            )
+
+            total_edit = st.number_input(
+                "Total Harga",
+                value=float(row[3])
+            )
+
+            harga_menu_edit = st.number_input(
+                "Harga per Menu",
+                value=float(row[4])
+            )
+
+            jumlah_edit = st.number_input(
+                "Jumlah Pesanan",
+                value=int(row[5]),
+                step=1
+            )
+
+            rata_edit = st.number_input(
+                "Rata-rata Harga",
+                value=float(row[6])
+            )
+
+            wp_diberikan_edit = st.number_input(
+                "Waktu Persiapan Diberikan",
+                value=float(row[7])
+            )
+
+            wp_digunakan_edit = st.number_input(
+                "Waktu Persiapan Digunakan",
+                value=float(row[8])
+            )
+
+            waktu_edit = st.text_input(
+                "Waktu Pesan",
+                value=row[9]
+            )
+
+            submit_edit = st.form_submit_button(
+                "💾 Simpan Perubahan"
+            )
+
+        if submit_edit:
+
+            update_data(
+
+                selected_id,
+
+                username_edit,
+
+                menu_edit,
+
+                total_edit,
+
+                harga_menu_edit,
+
+                jumlah_edit,
+
+                rata_edit,
+
+                wp_diberikan_edit,
+
+                wp_digunakan_edit,
+
+                waktu_edit
+
+            )
+
+            st.success(
+                "Data berhasil diperbarui."
+            )
+
+            st.rerun()
+
+
+# ==========================================
+# HAPUS DATA
+# ==========================================
+
+st.divider()
+st.subheader("🗑️ Hapus Data")
+
+hapus_id = st.selectbox(
+    "Pilih ID yang akan dihapus",
+    data_db["id"].tolist(),
+    key="hapus"
+)
+
+konfirmasi = st.checkbox(
+    "Saya yakin ingin menghapus data ini."
+)
+
+if st.button("🗑️ Hapus"):
+
+    if konfirmasi:
+
+        delete_data(hapus_id)
+
+        st.success(
+            "Data berhasil dihapus."
+        )
+
+        st.rerun()
+
+    else:
+
+        st.warning(
+            "Centang konfirmasi terlebih dahulu."
+        )
