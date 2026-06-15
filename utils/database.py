@@ -402,3 +402,24 @@ def save_dataframe(df):
     )
 
     conn.close()
+
+
+def get_data_by_id(id_data):
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM transaksi
+        WHERE id = ?
+        """,
+        (id_data,)
+    )
+
+    row = cursor.fetchone()
+
+    conn.close()
+
+    return row
