@@ -368,3 +368,37 @@ def count_data():
     conn.close()
 
     return total
+
+
+def replace_all_data(df):
+    conn = get_connection()
+
+    df.to_sql(
+        "transaksi",
+        conn,
+        if_exists="replace",
+        index=False
+    )
+
+    conn.close()
+
+
+def save_dataframe(df):
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        DROP TABLE IF EXISTS transaksi
+    """)
+
+    conn.commit()
+
+    df.to_sql(
+        "transaksi",
+        conn,
+        if_exists="replace",
+        index=False
+    )
+
+    conn.close()
