@@ -1,4 +1,7 @@
 import streamlit as st
+from utils.database import create_table
+
+create_table()
 
 st.set_page_config(
     page_title="Shopee Food Transaction Analytics",
