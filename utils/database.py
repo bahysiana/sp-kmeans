@@ -214,3 +214,22 @@ def import_csv(df):
     )
 
     conn.close()
+
+# ==========================
+# AMBIL DATA BERDASARKAN ID
+# ==========================
+def get_data_by_id(id_data):
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT * FROM transaksi WHERE id=?",
+        (id_data,)
+    )
+
+    data = cursor.fetchone()
+
+    conn.close()
+
+    return data
