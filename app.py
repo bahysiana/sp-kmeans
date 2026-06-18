@@ -14,21 +14,34 @@ st.set_page_config(
 )
 
 # =====================================================
+# LOAD CSS
+# =====================================================
+
+css_path = Path("assets/style.css")
+
+if css_path.exists():
+    with open(css_path, "r", encoding="utf-8") as f:
+        st.markdown(
+            f"<style>{f.read()}</style>",
+            unsafe_allow_html=True
+        )
+
+# =====================================================
 # MEMBUAT DATABASE
 # =====================================================
 
 create_table()
 
 # =====================================================
-# SIDEBAR MODERN
+# SIDEBAR
 # =====================================================
 
 with st.sidebar:
 
     # Logo
-    st.sidebar.image(
-    "assets/logo.png",
-    width=140
+    st.image(
+        "assets/logo.png",
+        width=120
     )
 
     st.markdown("## 🍽️ Shopee Food Analytics")
@@ -40,7 +53,7 @@ with st.sidebar:
     st.divider()
 
     st.markdown("""
-### 📚 Metode yang Digunakan
+### 📚 Metode
 
 - 🤖 K-Means Clustering
 - 📊 StandardScaler
@@ -68,27 +81,14 @@ with st.sidebar:
     st.info("""
 👨‍🎓 **Penelitian Skripsi**
 
-Analisis Pola Transaksi Shopee Food Berdasarkan Data Pemesanan pada Toko Buffet The Padang Pasir.
+Analisis Pola Transaksi Shopee Food Menggunakan Metode K-Means Clustering Berdasarkan Data Pemesanan pada Toko Buffet The Padang Pasir.
 """)
 
     st.divider()
 
     st.caption(
-        "© 2026\nUniversitas Putra Indonesia YPTK Padang"
+        "© 2026 | Universitas Putra Indonesia YPTK Padang"
     )
-
-# =====================================================
-# LOAD CSS
-# =====================================================
-
-css_path = Path("assets/style.css")
-
-if css_path.exists():
-    with open(css_path, "r", encoding="utf-8") as f:
-        st.markdown(
-            f"<style>{f.read()}</style>",
-            unsafe_allow_html=True
-        )
 
 # =====================================================
 # HERO SECTION
@@ -96,20 +96,20 @@ if css_path.exists():
 
 st.markdown("""
 <div style="
-padding:35px;
+padding:30px;
 border-radius:20px;
 background:linear-gradient(90deg,#2563eb,#4f46e5);
 color:white;
 text-align:center;
 margin-bottom:25px;
-box-shadow:0 8px 24px rgba(37,99,235,0.25);
+box-shadow:0 8px 20px rgba(37,99,235,0.25);
 ">
 
 <h1>🍽️ Analisis Pola Transaksi Shopee Food</h1>
 
 <h3>Menggunakan Metode K-Means Clustering</h3>
 
-<p>
+<p style="font-size:20px;">
 Buffet The Padang Pasir
 </p>
 
@@ -121,13 +121,22 @@ Buffet The Padang Pasir
 # =====================================================
 
 st.markdown("""
-## 👋 Selamat Datang
+# 👋 Selamat Datang
 
-Aplikasi ini dikembangkan sebagai media analisis untuk penelitian skripsi:
+Aplikasi ini dikembangkan sebagai media analisis untuk penelitian skripsi.
 
-> **ANALISIS POLA TRANSAKSI SHOPEE FOOD MENGGUNAKAN METODE K-MEANS CLUSTERING BERDASARKAN DATA PEMESANAN PADA TOKO BUFFET THE PADANG PASIR**
+### Judul Penelitian
 
-Melalui aplikasi ini, pengguna dapat mengelola data transaksi, melakukan preprocessing, menjalankan algoritma K-Means Clustering, melihat hasil analisis, serta mengunduh laporan hasil clustering.
+**ANALISIS POLA TRANSAKSI SHOPEE FOOD MENGGUNAKAN METODE K-MEANS CLUSTERING BERDASARKAN DATA PEMESANAN PADA TOKO BUFFET THE PADANG PASIR**
+
+Melalui aplikasi ini pengguna dapat:
+
+- 📂 Mengelola data transaksi
+- 📤 Mengimpor dataset CSV
+- 🧹 Melakukan preprocessing data
+- 🤖 Menjalankan algoritma K-Means Clustering
+- 📊 Melihat hasil analisis dan visualisasi
+- 📥 Mengunduh hasil clustering
 """)
 
 st.divider()
@@ -156,8 +165,8 @@ with col2:
 
 - Preprocessing
 - StandardScaler
-- K-Means
-- Cluster 3
+- K-Means Clustering
+- 3 Cluster
 """)
 
 with col3:
@@ -173,17 +182,17 @@ with col3:
 st.divider()
 
 # =====================================================
-# ALUR PENELITIAN
+# ALUR
 # =====================================================
 
 st.subheader("🚀 Alur Penggunaan")
 
 st.markdown("""
-1. 📤 Import atau tambah data transaksi.
-2. 🧹 Lakukan preprocessing data.
-3. 🤖 Jalankan K-Means Clustering (K = 3).
-4. 📊 Analisis hasil pengelompokan.
-5. 📥 Unduh hasil dalam format CSV.
+1. 📤 Tambahkan atau impor data transaksi.
+2. 🧹 Lakukan preprocessing menggunakan StandardScaler.
+3. 🤖 Jalankan proses K-Means Clustering.
+4. 📊 Analisis hasil pengelompokan data.
+5. 📥 Unduh hasil analisis jika diperlukan.
 """)
 
 st.divider()
@@ -202,9 +211,9 @@ with c1:
 
 **Pola Pemesanan Personal**
 
-- Jumlah pesanan rendah
-- Total harga relatif kecil
-- Konsumsi individu
+- Jumlah pesanan relatif sedikit
+- Total harga relatif rendah
+- Umumnya untuk kebutuhan individu
 """)
 
 with c2:
@@ -213,9 +222,9 @@ with c2:
 
 **Pola Pemesanan Reguler**
 
-- Nilai transaksi sedang
-- Pembelian rutin
-- Pelanggan reguler
+- Jumlah pesanan sedang
+- Nilai transaksi menengah
+- Mewakili pola pembelian rutin
 """)
 
 with c3:
@@ -224,9 +233,9 @@ with c3:
 
 **Pola Pemesanan Kelompok**
 
-- Jumlah pesanan tinggi
-- Total harga besar
-- Kebutuhan bersama
+- Jumlah pesanan lebih banyak
+- Total harga relatif tinggi
+- Umumnya dilakukan untuk kebutuhan bersama
 """)
 
 st.divider()
@@ -236,5 +245,5 @@ st.divider()
 # =====================================================
 
 st.caption(
-    "© 2026 | Dibangun menggunakan Python, Streamlit, SQLite, Plotly, dan Scikit-learn"
+    "© 2026 | Aplikasi Analisis Pola Transaksi Shopee Food | Python • Streamlit • SQLite • Scikit-learn • Plotly"
 )
