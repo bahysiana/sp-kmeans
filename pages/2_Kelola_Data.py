@@ -430,3 +430,77 @@ else:
     st.info("Belum ada data untuk diedit.")
 
 st.divider()
+
+# =====================================================
+# HAPUS DATA
+# =====================================================
+
+st.subheader("🗑️ Hapus Data")
+
+data_hapus = get_all_data()
+
+if not data_hapus.empty:
+
+    id_hapus = st.selectbox(
+        "Pilih ID yang akan dihapus",
+        data_hapus["id"].tolist(),
+        key="hapus_data"
+    )
+
+    konfirmasi = st.checkbox(
+        "Saya yakin ingin menghapus data ini."
+    )
+
+    if st.button(
+        "🗑️ Hapus Data",
+        use_container_width=True
+    ):
+
+        if not konfirmasi:
+
+            st.warning(
+                "Silakan centang konfirmasi terlebih dahulu."
+            )
+
+        else:
+
+            try:
+
+                delete_data(id_hapus)
+
+                st.success(
+                    "✅ Data berhasil dihapus."
+                )
+
+                st.rerun()
+
+            except Exception as e:
+
+                st.error(
+                    f"Gagal menghapus data: {e}"
+                )
+
+else:
+
+    st.info(
+        "Belum ada data yang dapat dihapus."
+    )
+
+st.divider()
+
+# =====================================================
+# INFORMASI
+# =====================================================
+
+st.info("""
+### 📌 Informasi
+
+Halaman ini mendukung fitur CRUD (Create, Read, Update, Delete):
+
+- ➕ Menambahkan data transaksi baru.
+- 📤 Mengimpor dataset dari file CSV.
+- 🔍 Mencari data berdasarkan username atau menu.
+- ✏️ Mengedit data transaksi yang sudah ada.
+- 🗑️ Menghapus data transaksi.
+- 💾 Semua perubahan disimpan secara permanen di database SQLite.
+""")
