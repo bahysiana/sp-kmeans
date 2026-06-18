@@ -1,3 +1,4 @@
+```python
 import streamlit as st
 from pathlib import Path
 from utils.database import create_table
@@ -7,7 +8,7 @@ from utils.database import create_table
 # =====================================================
 
 st.set_page_config(
-    page_title="Shopee Food K-Means Analysis",
+    page_title="Analisis Pola Transaksi Shopee Food",
     page_icon="🍽️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -27,7 +28,7 @@ if css_path.exists():
         )
 
 # =====================================================
-# MEMBUAT DATABASE
+# INISIALISASI DATABASE
 # =====================================================
 
 create_table()
@@ -38,23 +39,40 @@ create_table()
 
 with st.sidebar:
 
-    # Logo
-    st.image(
-        "assets/tes.png",
-        width=120
+    st.markdown(
+        """
+        <h1 style="text-align:center;">
+            🍽️
+        </h1>
+        """,
+        unsafe_allow_html=True
     )
 
-    st.markdown("## 🍽️ Shopee Food Analytics")
+    st.markdown(
+        """
+        <h2 style="text-align:center;">
+            Shopee Food Analytics
+        </h2>
+        """,
+        unsafe_allow_html=True
+    )
 
-    st.caption(
-        "Analisis Pola Transaksi Menggunakan Metode K-Means Clustering"
+    st.markdown(
+        """
+        <p style="text-align:center;">
+            Analisis Pola Transaksi<br>
+            Menggunakan Metode<br>
+            <b>K-Means Clustering</b>
+        </p>
+        """,
+        unsafe_allow_html=True
     )
 
     st.divider()
 
-    st.markdown("""
-### 📚 Metode
+    st.markdown("### 📚 Metode")
 
+    st.markdown("""
 - 🤖 K-Means Clustering
 - 📊 StandardScaler
 - 📈 Elbow Method
@@ -63,23 +81,30 @@ with st.sidebar:
 
     st.divider()
 
-    st.markdown("""
-### 🎯 Interpretasi Cluster
+    st.markdown("### 🎯 Interpretasi Cluster")
 
+    st.success("""
 🟢 **Cluster 1**
-- Pola Pemesanan Personal
 
+Pola Pemesanan Personal
+""")
+
+    st.info("""
 🔵 **Cluster 2**
-- Pola Pemesanan Reguler
 
+Pola Pemesanan Reguler
+""")
+
+    st.warning("""
 🟣 **Cluster 3**
-- Pola Pemesanan Kelompok
+
+Pola Pemesanan Kelompok
 """)
 
     st.divider()
 
     st.info("""
-👨‍🎓 **Penelitian Skripsi**
+**Penelitian Skripsi**
 
 Analisis Pola Transaksi Shopee Food Menggunakan Metode K-Means Clustering Berdasarkan Data Pemesanan pada Toko Buffet The Padang Pasir.
 """)
@@ -91,25 +116,24 @@ Analisis Pola Transaksi Shopee Food Menggunakan Metode K-Means Clustering Berdas
     )
 
 # =====================================================
-# HERO SECTION
+# HERO
 # =====================================================
 
 st.markdown("""
 <div style="
-padding:30px;
-border-radius:20px;
+padding:25px;
+border-radius:18px;
 background:linear-gradient(90deg,#2563eb,#4f46e5);
 color:white;
 text-align:center;
-margin-bottom:25px;
-box-shadow:0 8px 20px rgba(37,99,235,0.25);
+margin-bottom:20px;
 ">
 
 <h1>🍽️ Analisis Pola Transaksi Shopee Food</h1>
 
 <h3>Menggunakan Metode K-Means Clustering</h3>
 
-<p style="font-size:20px;">
+<p>
 Buffet The Padang Pasir
 </p>
 
@@ -121,22 +145,20 @@ Buffet The Padang Pasir
 # =====================================================
 
 st.markdown("""
-# 👋 Selamat Datang
+## 👋 Selamat Datang
 
-Aplikasi ini dikembangkan sebagai media analisis untuk penelitian skripsi.
+Aplikasi ini dikembangkan sebagai media analisis untuk penelitian skripsi:
 
-### Judul Penelitian
-
-**ANALISIS POLA TRANSAKSI SHOPEE FOOD MENGGUNAKAN METODE K-MEANS CLUSTERING BERDASARKAN DATA PEMESANAN PADA TOKO BUFFET THE PADANG PASIR**
+### ANALISIS POLA TRANSAKSI SHOPEE FOOD MENGGUNAKAN METODE K-MEANS CLUSTERING BERDASARKAN DATA PEMESANAN PADA TOKO BUFFET THE PADANG PASIR
 
 Melalui aplikasi ini pengguna dapat:
 
 - 📂 Mengelola data transaksi
 - 📤 Mengimpor dataset CSV
-- 🧹 Melakukan preprocessing data
-- 🤖 Menjalankan algoritma K-Means Clustering
-- 📊 Melihat hasil analisis dan visualisasi
-- 📥 Mengunduh hasil clustering
+- 🧹 Melakukan preprocessing
+- 🤖 Menjalankan K-Means Clustering
+- 📊 Melihat hasil clustering
+- 📥 Mengunduh hasil analisis
 """)
 
 st.divider()
@@ -163,10 +185,10 @@ with col2:
     st.success("""
 ### 🤖 Analisis
 
-- Preprocessing
 - StandardScaler
-- K-Means Clustering
-- 3 Cluster
+- K-Means
+- K = 3
+- Clustering
 """)
 
 with col3:
@@ -175,8 +197,8 @@ with col3:
 
 - Dashboard
 - Grafik
-- Hasil Cluster
-- Download CSV
+- Hasil
+- Download
 """)
 
 st.divider()
@@ -188,17 +210,21 @@ st.divider()
 st.subheader("🚀 Alur Penggunaan")
 
 st.markdown("""
-1. 📤 Tambahkan atau impor data transaksi.
-2. 🧹 Lakukan preprocessing menggunakan StandardScaler.
-3. 🤖 Jalankan proses K-Means Clustering.
-4. 📊 Analisis hasil pengelompokan data.
-5. 📥 Unduh hasil analisis jika diperlukan.
+1. Tambahkan atau import data transaksi.
+
+2. Jalankan preprocessing menggunakan StandardScaler.
+
+3. Jalankan proses K-Means Clustering.
+
+4. Analisis hasil pengelompokan data.
+
+5. Download hasil clustering apabila diperlukan.
 """)
 
 st.divider()
 
 # =====================================================
-# INTERPRETASI CLUSTER
+# INTERPRETASI
 # =====================================================
 
 st.subheader("🎯 Interpretasi Cluster")
@@ -209,33 +235,33 @@ with c1:
     st.success("""
 ### 🟢 Cluster 1
 
-**Pola Pemesanan Personal**
+Pola Pemesanan Personal
 
-- Jumlah pesanan relatif sedikit
-- Total harga relatif rendah
-- Umumnya untuk kebutuhan individu
+- Jumlah pesanan rendah
+- Total harga rendah
+- Konsumsi individu
 """)
 
 with c2:
     st.info("""
 ### 🔵 Cluster 2
 
-**Pola Pemesanan Reguler**
+Pola Pemesanan Reguler
 
 - Jumlah pesanan sedang
-- Nilai transaksi menengah
-- Mewakili pola pembelian rutin
+- Pembelian rutin
+- Transaksi menengah
 """)
 
 with c3:
     st.warning("""
 ### 🟣 Cluster 3
 
-**Pola Pemesanan Kelompok**
+Pola Pemesanan Kelompok
 
-- Jumlah pesanan lebih banyak
-- Total harga relatif tinggi
-- Umumnya dilakukan untuk kebutuhan bersama
+- Jumlah pesanan tinggi
+- Total harga tinggi
+- Kebutuhan bersama
 """)
 
 st.divider()
@@ -245,5 +271,6 @@ st.divider()
 # =====================================================
 
 st.caption(
-    "© 2026 | Aplikasi Analisis Pola Transaksi Shopee Food | Python • Streamlit • SQLite • Scikit-learn • Plotly"
+    "© 2026 | Python • Streamlit • SQLite • Plotly • Scikit-learn"
 )
+```
