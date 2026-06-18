@@ -40,7 +40,7 @@ with st.sidebar:
 
     # Logo
     st.image(
-        "assets/logo.png",
+        "assets/tes.png",
         width=120
     )
 
