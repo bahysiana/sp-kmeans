@@ -309,3 +309,124 @@ else:
 
 st.divider()
 
+# =====================================================
+# EDIT DATA
+# =====================================================
+
+st.subheader("✏️ Edit Data")
+
+data_edit = get_all_data()
+
+if not data_edit.empty:
+
+    id_pilih = st.selectbox(
+        "Pilih ID Data yang Akan Diedit",
+        data_edit["id"].tolist()
+    )
+
+    row = get_data_by_id(id_pilih)
+
+    if row is not None:
+
+        with st.form("form_edit_data"):
+
+            username_edit = st.text_input(
+                "Username",
+                value=row["username"]
+            )
+
+            menu_edit = st.text_input(
+                "Menu yang Dibeli",
+                value=row["menu_yang_dibeli"]
+            )
+
+            total_edit = st.number_input(
+                "Total Harga",
+                min_value=0.0,
+                value=float(row["Total_harga"])
+            )
+
+            harga_menu_edit = st.number_input(
+                "Harga per Menu",
+                min_value=0.0,
+                value=float(row["harga_per_menu"])
+            )
+
+            jumlah_edit = st.number_input(
+                "Jumlah Pesanan",
+                min_value=1,
+                value=int(row["Jumlah_pesanan"])
+            )
+
+            rata_edit = st.number_input(
+                "Rata-rata Harga",
+                min_value=0.0,
+                value=float(row["rata_rata_harga"])
+            )
+
+            wp_diberikan_edit = st.number_input(
+                "Waktu Persiapan yang Diberikan",
+                min_value=0.0,
+                value=float(row["waktu_persiapan_yang_diberikan"])
+            )
+
+            wp_digunakan_edit = st.number_input(
+                "Waktu Persiapan Digunakan",
+                min_value=0.0,
+                value=float(row["waktu_persiapan_digunakan"])
+            )
+
+            waktu_edit = st.text_input(
+                "Waktu Pemesanan",
+                value=row["waktu_pesan"]
+            )
+
+            tombol_edit = st.form_submit_button(
+                "💾 Simpan Perubahan"
+            )
+
+        if tombol_edit:
+
+            try:
+
+                update_data(
+
+                    id_pilih,
+
+                    username_edit,
+
+                    menu_edit,
+
+                    total_edit,
+
+                    harga_menu_edit,
+
+                    jumlah_edit,
+
+                    rata_edit,
+
+                    wp_diberikan_edit,
+
+                    wp_digunakan_edit,
+
+                    waktu_edit
+
+                )
+
+                st.success(
+                    "✅ Data berhasil diperbarui."
+                )
+
+                st.rerun()
+
+            except Exception as e:
+
+                st.error(
+                    f"Gagal memperbarui data: {e}"
+                )
+
+else:
+
+    st.info("Belum ada data untuk diedit.")
+
+st.divider()
