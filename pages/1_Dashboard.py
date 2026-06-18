@@ -1,3 +1,4 @@
+```python
 import streamlit as st
 import plotly.express as px
 
@@ -19,23 +20,26 @@ st.set_page_config(
 
 df = get_all_data()
 
-st.title("📊 Dashboard Analisis Shopee Food")
-st.markdown("""
-Selamat datang pada aplikasi **Analisis Pola Transaksi Shopee Food Menggunakan Metode K-Means Clustering**.
+# =====================================================
+# HEADER
+# =====================================================
 
-Dashboard ini menampilkan ringkasan data transaksi dan hasil analisis yang digunakan dalam penelitian.
-""")
+st.title("📊 Dashboard Analisis Shopee Food")
+
+st.caption(
+    "Ringkasan data transaksi dan visualisasi hasil analisis menggunakan metode K-Means Clustering."
+)
 
 st.divider()
 
 # =====================================================
-# JIKA DATABASE KOSONG
+# DATABASE KOSONG
 # =====================================================
 
 if df.empty:
 
     st.warning(
-        "⚠️ Database masih kosong. Silakan tambahkan data pada menu **Kelola Data**."
+        "⚠️ Database masih kosong. Silakan tambahkan data pada menu Kelola Data."
     )
 
     st.stop()
@@ -52,82 +56,98 @@ total_item = df["Jumlah_pesanan"].sum()
 
 rata_harga = df["rata_rata_harga"].mean()
 
-c1, c2, c3, c4 = st.columns(4)
+m1, m2, m3, m4 = st.columns(4)
 
-c1.metric(
-    "📦 Total Transaksi",
-    f"{total_transaksi:,}"
-)
+with m1:
+    st.metric(
+        "📦 Total Transaksi",
+        f"{total_transaksi:,}"
+    )
 
-c2.metric(
-    "💰 Total Omzet",
-    f"Rp {total_omzet:,.0f}"
-)
+with m2:
+    st.metric(
+        "💰 Total Omzet",
+        f"Rp {total_omzet:,.0f}"
+    )
 
-c3.metric(
-    "🛒 Total Item",
-    f"{int(total_item):,}"
-)
+with m3:
+    st.metric(
+        "🛒 Total Item",
+        f"{int(total_item):,}"
+    )
 
-c4.metric(
-    "📈 Rata-rata Harga",
-    f"Rp {rata_harga:,.0f}"
-)
+with m4:
+    st.metric(
+        "📈 Rata-rata Harga",
+        f"Rp {rata_harga:,.0f}"
+    )
 
 st.divider()
 
 # =====================================================
-# GRAFIK 1
+# GRAFIK
 # =====================================================
 
-kiri, kanan = st.columns(2)
+col1, col2 = st.columns(2)
 
-with kiri:
+with col1:
 
     st.subheader("💰 Distribusi Total Harga")
 
-    fig1 = px.histogram(
-
+    fig_total = px.histogram(
         df,
-
         x="Total_harga",
-
-        nbins=25,
-
-        title="Distribusi Total Harga"
-
+        nbins=20
     )
 
     st.plotly_chart(
-
-        fig1,
-
+        fig_total,
         use_container_width=True
-
     )
 
-with kanan:
+with col2:
 
     st.subheader("🛒 Distribusi Jumlah Pesanan")
 
-    fig2 = px.histogram(
-
+    fig_jumlah = px.histogram(
         df,
-
         x="Jumlah_pesanan",
-
-        nbins=15,
-
-        title="Distribusi Jumlah Pesanan"
-
+        nbins=15
     )
 
     st.plotly_chart(
-
-        fig2,
-
+        fig_jumlah,
         use_container_width=True
+    )
 
+st.divider()
+
+# =====================================================
+# DISTRIBUSI CLUSTER
+# =====================================================
+
+st.subheader("🤖 Distribusi Cluster")
+
+if "cluster_summary" in st.session_state:
+
+    summary = st.session_state["cluster_summary"]
+
+    fig_cluster = px.pie(
+        summary,
+        names="Interpretasi",
+        values="Jumlah Data",
+        hole=0.45
+    )
+
+    st.plotly_chart(
+        fig_cluster,
+        use_container_width=True
+    )
+
+else:
+
+    st.info(
+        "Silakan jalankan proses K-Means terlebih dahulu untuk melihat distribusi cluster."
     )
 
 st.divider()
@@ -136,57 +156,67 @@ st.divider()
 # PREVIEW DATA
 # =====================================================
 
-st.subheader("📋 Preview Data")
+st.subheader("📋 Preview Data Transaksi")
 
 st.dataframe(
-
     df.head(10),
-
     use_container_width=True,
-
     hide_index=True
-
 )
 
 st.divider()
 
 # =====================================================
-# INFORMASI CLUSTER
+# INTERPRETASI CLUSTER
 # =====================================================
 
 st.subheader("🎯 Interpretasi Cluster")
 
-col1, col2, col3 = st.columns(3)
+c1, c2, c3 = st.columns(3)
 
-with col1:
+with c1:
 
     st.success("""
 ### 🟢 Cluster 1
 
 **Pola Pemesanan Personal**
 
-Jumlah pesanan relatif sedikit dan
-mencerminkan kebutuhan individu.
+- Jumlah pesanan relatif sedikit.
+- Total harga relatif rendah.
+- Umumnya untuk kebutuhan individu.
 """)
 
-with col2:
+with c2:
 
     st.info("""
 ### 🔵 Cluster 2
 
 **Pola Pemesanan Reguler**
 
-Karakteristik transaksi sedang dan
-mencerminkan pola pembelian rutin.
+- Karakteristik transaksi sedang.
+- Mencerminkan pola pembelian rutin.
+- Aktivitas pelanggan reguler.
 """)
 
-with col3:
+with c3:
 
     st.warning("""
 ### 🟣 Cluster 3
 
 **Pola Pemesanan Kelompok**
 
-Jumlah pesanan relatif tinggi dan
-umumnya dilakukan secara bersama.
+- Jumlah pesanan relatif tinggi.
+- Total transaksi lebih besar.
+- Umumnya dilakukan untuk kebutuhan bersama.
 """)
+
+st.divider()
+
+# =====================================================
+# FOOTER
+# =====================================================
+
+st.caption(
+    "© 2026 | Dashboard Analisis Shopee Food Menggunakan Metode K-Means Clustering"
+)
+```
