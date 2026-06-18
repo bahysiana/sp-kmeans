@@ -2,24 +2,19 @@ import streamlit as st
 import pandas as pd
 
 from utils.database import get_all_data
-from utils.preprocessing import (
-    summary,
-    check_missing,
-    check_duplicate,
-    preprocessing_pipeline
-)
+from utils.preprocessing import preprocessing_pipeline
 
 # =====================================================
 # KONFIGURASI HALAMAN
 # =====================================================
 
 st.set_page_config(
-    page_title="Preprocessing Data",
-    page_icon="⚙️",
+    page_title="Preprocessing",
+    page_icon="🧹",
     layout="wide"
 )
 
-st.title("⚙️ Preprocessing Data")
+st.title("🧹 Preprocessing Data")
 st.caption(
     "Tahapan persiapan data sebelum proses K-Means Clustering."
 )
@@ -33,46 +28,33 @@ st.divider()
 df = get_all_data()
 
 if df.empty:
-    st.warning("Belum ada data pada database.")
+    st.warning(
+        "⚠️ Belum ada data pada database."
+    )
     st.stop()
 
 # =====================================================
-# RINGKASAN DATA
+# INFORMASI FITUR
 # =====================================================
 
-st.subheader("📊 Ringkasan Dataset")
+st.subheader("📌 Fitur yang Digunakan")
 
-info = summary(df)
+st.info("""
+Fitur yang digunakan dalam proses clustering:
 
-c1, c2, c3, c4 = st.columns(4)
+- Total_harga
+- Jumlah_pesanan
+- rata_rata_harga
+- waktu_persiapan_digunakan
 
-c1.metric(
-    "Jumlah Data",
-    info["Jumlah Data"]
-)
-
-c2.metric(
-    "Jumlah Kolom",
-    info["Jumlah Kolom"]
-)
-
-c3.metric(
-    "Missing Value",
-    info["Missing Value"]
-)
-
-c4.metric(
-    "Duplikat",
-    info["Duplikat"]
-)
-
-st.divider()
+Normalisasi dilakukan menggunakan **StandardScaler**.
+""")
 
 # =====================================================
-# DATA ASLI
+# DATA SEBELUM PREPROCESSING
 # =====================================================
 
-st.subheader("📋 Dataset Sebelum Preprocessing")
+st.subheader("📋 Data Sebelum Preprocessing")
 
 st.dataframe(
     df,
@@ -80,105 +62,66 @@ st.dataframe(
     hide_index=True
 )
 
+st.divider()
+
 # =====================================================
-# CEK MISSING VALUE
+# PROSES PREPROCESSING
 # =====================================================
 
-st.subheader("🔍 Missing Value")
-
-missing = check_missing(df)
-
-st.dataframe(
-    missing.to_frame(
-        name="Jumlah Missing"
-    ),
+if st.button(
+    "🚀 Jalankan Preprocessing",
     use_container_width=True
-)
+):
 
-# =====================================================
-# CEK DUPLIKAT
-# =====================================================
+    try:
 
-st.subheader("🧩 Data Duplikat")
+        scaled_data, scaler = preprocessing_pipeline(df)
 
-duplicate = check_duplicate(df)
+        fitur = [
+            "Total_harga",
+            "Jumlah_pesanan",
+            "rata_rata_harga",
+            "waktu_persiapan_digunakan"
+        ]
 
-if duplicate == 0:
+        hasil_preprocessing = pd.DataFrame(
+            scaled_data,
+            columns=fitur
+        )
 
-    st.success(
-        "Tidak ditemukan data duplikat."
-    )
+        st.session_state["scaled_data"] = scaled_data
+        st.session_state["preprocessing_result"] = hasil_preprocessing
+        st.session_state["scaler"] = scaler
 
-else:
+        st.success(
+            "✅ Preprocessing berhasil dilakukan."
+        )
 
-    st.warning(
-        f"Ditemukan {duplicate} data duplikat."
-    )
+        st.subheader("📊 Hasil Standardisasi")
 
-st.divider()
+        st.dataframe(
+            hasil_preprocessing,
+            use_container_width=True,
+            hide_index=True
+        )
 
-# =====================================================
-# FITUR YANG DIGUNAKAN
-# =====================================================
+    except Exception as e:
 
-st.subheader("🎯 Fitur yang Digunakan")
-
-fitur = pd.DataFrame({
-
-    "Variabel": [
-
-        "total_harga",
-
-        "jumlah_pesanan",
-
-        "rata_rata_harga",
-
-        "waktu_persiapan_digunakan"
-
-    ],
-
-    "Digunakan": [
-
-        "✅",
-
-        "✅",
-
-        "✅",
-
-        "✅"
-
-    ]
-
-})
-
-st.table(fitur)
+        st.error(
+            f"Terjadi kesalahan: {e}"
+        )
 
 st.divider()
 
 # =====================================================
-# NORMALISASI
+# KETERANGAN
 # =====================================================
 
-st.subheader("📈 Hasil Normalisasi StandardScaler")
+st.success("""
+### 📖 Keterangan
 
-normalisasi, scaler = preprocessing_pipeline(df)
-
-st.dataframe(
-    normalisasi,
-    use_container_width=True,
-    hide_index=True
-)
-
-st.divider()
-
-# =====================================================
-# PENJELASAN
-# =====================================================
-
-st.info(
-    """
-Preprocessing dilakukan untuk menyamakan skala antar variabel
-menggunakan StandardScaler sehingga proses K-Means tidak
-didominasi oleh atribut yang memiliki nilai lebih besar.
-"""
-)
+Pada tahap preprocessing dilakukan normalisasi data
+menggunakan metode **StandardScaler** agar setiap
+fitur memiliki skala yang sebanding sebelum diproses
+menggunakan algoritma K-Means Clustering.
+""")
