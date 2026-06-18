@@ -1,4 +1,5 @@
 import pandas as pd
+
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 
@@ -61,7 +62,7 @@ def calculate_silhouette(data, k=3):
 
 def run_kmeans(data, k=3):
     """
-    Menjalankan proses clustering K-Means.
+    Menjalankan proses clustering.
     """
 
     model = KMeans(
@@ -78,17 +79,17 @@ def run_kmeans(data, k=3):
 
 
 # =====================================================
-# MENAMBAHKAN LABEL CLUSTER
+# TAMBAHKAN LABEL CLUSTER
 # =====================================================
 
 def add_cluster_to_dataframe(df, labels):
     """
-    Menambahkan kolom Cluster ke dataframe.
+    Menambahkan hasil cluster ke dataframe.
     """
 
     hasil = df.copy()
 
-    # Agar nomor cluster dimulai dari 1
+    # Agar cluster menjadi 1, 2, 3
     hasil["Cluster"] = labels + 1
 
     return hasil
@@ -100,13 +101,8 @@ def add_cluster_to_dataframe(df, labels):
 
 def interpret_cluster(df):
     """
-    Memberikan nama interpretasi cluster berdasarkan
+    Memberikan nama cluster berdasarkan
     rata-rata Total_harga dan Jumlah_pesanan.
-
-    Interpretasi:
-    - Nilai terendah  -> Pola Pemesanan Personal
-    - Nilai sedang    -> Pola Pemesanan Reguler
-    - Nilai tertinggi -> Pola Pemesanan Kelompok
     """
 
     centroid_summary = (
@@ -129,24 +125,23 @@ def interpret_cluster(df):
 
     )
 
-    urutan_cluster = centroid_summary.index.tolist()
+    urutan = centroid_summary.index.tolist()
 
-    if len(urutan_cluster) != 3:
+    if len(urutan) != 3:
 
         raise ValueError(
-            "Interpretasi penelitian ini hanya mendukung "
-            "3 cluster (k = 3)."
+            "Interpretasi ini dirancang khusus untuk 3 cluster."
         )
 
     mapping = {
 
-        urutan_cluster[0]:
+        urutan[0]:
             "Pola Pemesanan Personal",
 
-        urutan_cluster[1]:
+        urutan[1]:
             "Pola Pemesanan Reguler",
 
-        urutan_cluster[2]:
+        urutan[2]:
             "Pola Pemesanan Kelompok"
 
     }
@@ -164,7 +159,7 @@ def interpret_cluster(df):
 
 def cluster_summary(df):
     """
-    Menampilkan jumlah data pada setiap cluster.
+    Menampilkan jumlah data pada tiap cluster.
     """
 
     summary = (
@@ -194,12 +189,13 @@ def cluster_summary(df):
 
 
 # =====================================================
-# RATA-RATA TIAP CLUSTER
+# STATISTIK CLUSTER
 # =====================================================
 
 def cluster_statistics(df):
     """
-    Menampilkan statistik rata-rata setiap cluster.
+    Menampilkan rata-rata tiap variabel
+    pada masing-masing cluster.
     """
 
     statistik = (
@@ -218,7 +214,6 @@ def cluster_statistics(df):
                 "Jumlah_pesanan",
                 "rata_rata_harga",
                 "waktu_persiapan_digunakan"
-
             ]
 
         ]
@@ -227,6 +222,8 @@ def cluster_statistics(df):
 
         .round(2)
 
+        .reset_index()
+
     )
 
-    return statistik.reset_index()
+    return statistik
