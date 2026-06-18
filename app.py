@@ -26,7 +26,7 @@ create_table()
 with st.sidebar:
 
     # Logo
-   st.sidebar.image(
+    st.sidebar.image(
     "assets/logo.png",
     width=140
     )
