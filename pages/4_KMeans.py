@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 import plotly.express as px
 
 from utils.database import get_all_data
@@ -9,7 +10,8 @@ from utils.clustering import (
     run_kmeans,
     add_cluster_to_dataframe,
     interpret_cluster,
-    cluster_summary
+    cluster_summary,
+    cluster_statistics
 )
 
 # =====================================================
@@ -22,9 +24,9 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🤖 Proses K-Means Clustering")
+st.title("🤖 K-Means Clustering")
 st.caption(
-    "Analisis pola transaksi Shopee Food menggunakan metode K-Means Clustering."
+    "Proses pengelompokan pola transaksi Shopee Food menggunakan algoritma K-Means."
 )
 
 st.divider()
@@ -36,35 +38,33 @@ st.divider()
 df = get_all_data()
 
 if df.empty:
-    st.warning("⚠️ Database masih kosong. Silakan tambahkan data terlebih dahulu.")
+    st.warning("⚠️ Database masih kosong.")
     st.stop()
-
-# =====================================================
-# NILAI K DIKUNCI MENJADI 3
-# =====================================================
-
-k = 3
-
-st.success(
-    "✅ Jumlah cluster ditetapkan sebanyak **3 cluster (K = 3)** "
-    "sesuai dengan metodologi penelitian."
-)
-
-st.info("""
-Interpretasi cluster yang digunakan:
-
-- 🟢 Cluster 1 → Pola Pemesanan Personal
-- 🔵 Cluster 2 → Pola Pemesanan Reguler
-- 🟣 Cluster 3 → Pola Pemesanan Kelompok
-""")
-
-st.divider()
 
 # =====================================================
 # PREPROCESSING
 # =====================================================
 
 scaled_data, scaler = preprocessing_pipeline(df)
+
+# =====================================================
+# INFORMASI
+# =====================================================
+
+st.info("""
+### Konfigurasi Penelitian
+
+- Metode : K-Means Clustering
+- Jumlah Cluster (K) : **3**
+- Evaluasi : Elbow Method & Silhouette Score
+
+Interpretasi:
+- 🟢 Cluster 1 → Pola Pemesanan Personal
+- 🔵 Cluster 2 → Pola Pemesanan Reguler
+- 🟣 Cluster 3 → Pola Pemesanan Kelompok
+""")
+
+st.divider()
 
 # =====================================================
 # ELBOW METHOD
@@ -105,14 +105,14 @@ score = calculate_silhouette(
 )
 
 st.metric(
-    "Silhouette Score",
-    round(score, 4)
+    label="Nilai Silhouette Score",
+    value=round(score, 4)
 )
 
 st.divider()
 
 # =====================================================
-# PROSES CLUSTERING
+# PROSES K-MEANS
 # =====================================================
 
 if st.button(
@@ -138,13 +138,17 @@ if st.button(
         hasil
     )
 
-    # Simpan ke session_state
+    statistik = cluster_statistics(
+        hasil
+    )
+
+    # Simpan ke Session State
     st.session_state["hasil_cluster"] = hasil
     st.session_state["cluster_summary"] = summary
+    st.session_state["cluster_statistics"] = statistik
     st.session_state["centroid"] = centroid
-    st.session_state["k_value"] = 3
 
-    st.success("✅ Proses clustering berhasil dilakukan.")
+    st.success("✅ Clustering berhasil dilakukan.")
 
     st.subheader("📋 Hasil Clustering")
 
@@ -156,7 +160,7 @@ if st.button(
 
     st.subheader("📊 Distribusi Cluster")
 
-    fig_bar = px.bar(
+    fig_cluster = px.bar(
         summary,
         x="Interpretasi",
         y="Jumlah Data",
@@ -165,17 +169,19 @@ if st.button(
     )
 
     st.plotly_chart(
-        fig_bar,
+        fig_cluster,
         use_container_width=True
     )
 
+    st.subheader("📈 Statistik Cluster")
+
+    st.dataframe(
+        statistik,
+        use_container_width=True,
+        hide_index=True
+    )
+
     st.subheader("📍 Nilai Centroid")
-
-    centroid_df = (
-        px.data.iris().head(0)
-    )  # placeholder kosong
-
-    import pandas as pd
 
     centroid_df = pd.DataFrame(
         centroid,
@@ -199,11 +205,17 @@ if st.button(
     )
 
     st.success("""
-Interpretasi akhir:
+### Interpretasi Cluster
 
-🟢 Cluster 1 → Pola Pemesanan Personal
+🟢 **Cluster 1 - Pola Pemesanan Personal**
 
-🔵 Cluster 2 → Pola Pemesanan Reguler
+Kelompok transaksi dengan total harga dan jumlah pesanan relatif rendah.
 
-🟣 Cluster 3 → Pola Pemesanan Kelompok
+🔵 **Cluster 2 - Pola Pemesanan Reguler**
+
+Kelompok transaksi dengan karakteristik sedang yang mencerminkan pola pembelian rutin.
+
+🟣 **Cluster 3 - Pola Pemesanan Kelompok**
+
+Kelompok transaksi dengan total harga dan jumlah pesanan relatif tinggi yang umumnya dilakukan untuk kebutuhan bersama.
 """)
