@@ -26,9 +26,10 @@ create_table()
 with st.sidebar:
 
     # Logo
-    st.image(
-        "assets/tes.png",
-        use_container_width=True
+   st.sidebar.image(
+    "assets/logo.png",
+    width=140
+    )
     )
 
     st.markdown("## 🍽️ Shopee Food Analytics")
