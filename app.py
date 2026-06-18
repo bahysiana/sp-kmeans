@@ -1,4 +1,3 @@
-```python
 import streamlit as st
 from pathlib import Path
 from utils.database import create_table
@@ -28,7 +27,7 @@ if css_path.exists():
         )
 
 # =====================================================
-# INISIALISASI DATABASE
+# MEMBUAT DATABASE
 # =====================================================
 
 create_table()
@@ -84,19 +83,19 @@ with st.sidebar:
     st.markdown("### 🎯 Interpretasi Cluster")
 
     st.success("""
-🟢 **Cluster 1**
+🟢 Cluster 1
 
 Pola Pemesanan Personal
 """)
 
     st.info("""
-🔵 **Cluster 2**
+🔵 Cluster 2
 
 Pola Pemesanan Reguler
 """)
 
     st.warning("""
-🟣 **Cluster 3**
+🟣 Cluster 3
 
 Pola Pemesanan Kelompok
 """)
@@ -114,9 +113,8 @@ Analisis Pola Transaksi Shopee Food Menggunakan Metode K-Means Clustering Berdas
     st.caption(
         "© 2026 | Universitas Putra Indonesia YPTK Padang"
     )
-
-# =====================================================
-# HERO
+    # =====================================================
+# HERO SECTION
 # =====================================================
 
 st.markdown("""
@@ -133,7 +131,7 @@ margin-bottom:20px;
 
 <h3>Menggunakan Metode K-Means Clustering</h3>
 
-<p>
+<p style="font-size:18px;">
 Buffet The Padang Pasir
 </p>
 
@@ -145,29 +143,33 @@ Buffet The Padang Pasir
 # =====================================================
 
 st.markdown("""
-## 👋 Selamat Datang
+# 👋 Selamat Datang
 
-Aplikasi ini dikembangkan sebagai media analisis untuk penelitian skripsi:
+Aplikasi ini merupakan implementasi penelitian skripsi yang bertujuan
+menganalisis pola transaksi pelanggan Shopee Food menggunakan algoritma
+**K-Means Clustering**.
 
-### ANALISIS POLA TRANSAKSI SHOPEE FOOD MENGGUNAKAN METODE K-MEANS CLUSTERING BERDASARKAN DATA PEMESANAN PADA TOKO BUFFET THE PADANG PASIR
+### 📖 Judul Penelitian
 
-Melalui aplikasi ini pengguna dapat:
+**ANALISIS POLA TRANSAKSI SHOPEE FOOD MENGGUNAKAN METODE K-MEANS CLUSTERING BERDASARKAN DATA PEMESANAN PADA TOKO BUFFET THE PADANG PASIR**
 
-- 📂 Mengelola data transaksi
-- 📤 Mengimpor dataset CSV
-- 🧹 Melakukan preprocessing
-- 🤖 Menjalankan K-Means Clustering
-- 📊 Melihat hasil clustering
-- 📥 Mengunduh hasil analisis
+### 🚀 Fitur Utama
+
+- 📂 Kelola Data Transaksi
+- 📤 Import Dataset CSV
+- 🧹 Preprocessing Data
+- 🤖 K-Means Clustering
+- 📊 Visualisasi Hasil
+- 📥 Download Hasil Analisis
 """)
 
 st.divider()
 
 # =====================================================
-# FITUR
+# FITUR UTAMA
 # =====================================================
 
-st.subheader("✨ Fitur Utama")
+st.subheader("✨ Fitur Aplikasi")
 
 col1, col2, col3 = st.columns(3)
 
@@ -186,9 +188,9 @@ with col2:
 ### 🤖 Analisis
 
 - StandardScaler
-- K-Means
+- K-Means Clustering
 - K = 3
-- Clustering
+- Clustering Otomatis
 """)
 
 with col3:
@@ -196,72 +198,87 @@ with col3:
 ### 📊 Visualisasi
 
 - Dashboard
-- Grafik
-- Hasil
-- Download
+- Grafik Interaktif
+- Hasil Cluster
+- Download CSV
 """)
 
 st.divider()
 
 # =====================================================
-# ALUR
+# ALUR PENGGUNAAN
 # =====================================================
 
-st.subheader("🚀 Alur Penggunaan")
+st.subheader("🚀 Alur Penggunaan Aplikasi")
 
 st.markdown("""
-1. Tambahkan atau import data transaksi.
+Ikuti langkah-langkah berikut untuk menggunakan aplikasi:
 
-2. Jalankan preprocessing menggunakan StandardScaler.
-
-3. Jalankan proses K-Means Clustering.
-
-4. Analisis hasil pengelompokan data.
-
-5. Download hasil clustering apabila diperlukan.
+1. 📂 Masuk ke menu **Kelola Data** dan tambahkan data atau impor file CSV.
+2. 🧹 Buka menu **Preprocessing** untuk melakukan normalisasi data menggunakan **StandardScaler**.
+3. 🤖 Masuk ke menu **K-Means Clustering** dan jalankan proses clustering dengan **K = 3**.
+4. 📊 Lihat hasil pengelompokan pada menu **Hasil** beserta visualisasi yang tersedia.
+5. 📥 Unduh hasil analisis melalui menu **Download** apabila diperlukan.
 """)
 
 st.divider()
 
 # =====================================================
-# INTERPRETASI
+# INTERPRETASI CLUSTER
 # =====================================================
 
-st.subheader("🎯 Interpretasi Cluster")
+st.subheader("🎯 Interpretasi Hasil Cluster")
 
-c1, c2, c3 = st.columns(3)
+col1, col2, col3 = st.columns(3)
 
-with c1:
+with col1:
     st.success("""
 ### 🟢 Cluster 1
 
-Pola Pemesanan Personal
+**Pola Pemesanan Personal**
 
-- Jumlah pesanan rendah
-- Total harga rendah
-- Konsumsi individu
+- Jumlah pesanan relatif sedikit
+- Total transaksi relatif rendah
+- Umumnya untuk kebutuhan individu
 """)
 
-with c2:
+with col2:
     st.info("""
 ### 🔵 Cluster 2
 
-Pola Pemesanan Reguler
+**Pola Pemesanan Reguler**
 
 - Jumlah pesanan sedang
-- Pembelian rutin
-- Transaksi menengah
+- Nilai transaksi menengah
+- Mencerminkan pola pembelian rutin pelanggan
 """)
 
-with c3:
+with col3:
     st.warning("""
 ### 🟣 Cluster 3
 
-Pola Pemesanan Kelompok
+**Pola Pemesanan Kelompok**
 
-- Jumlah pesanan tinggi
-- Total harga tinggi
-- Kebutuhan bersama
+- Jumlah pesanan lebih banyak
+- Total transaksi relatif tinggi
+- Umumnya dilakukan untuk kebutuhan bersama
+""")
+
+st.divider()
+
+# =====================================================
+# TIPS PENGGUNAAN
+# =====================================================
+
+st.subheader("💡 Tips Penggunaan")
+
+st.info("""
+Untuk memperoleh hasil clustering yang optimal:
+
+- Pastikan data transaksi sudah lengkap.
+- Gunakan menu **Preprocessing** sebelum menjalankan K-Means.
+- Nilai **K** telah ditetapkan menjadi **3** sesuai metodologi penelitian.
+- Analisis hasil cluster pada menu **Hasil** untuk melihat karakteristik masing-masing kelompok transaksi.
 """)
 
 st.divider()
@@ -270,7 +287,14 @@ st.divider()
 # FOOTER
 # =====================================================
 
-st.caption(
-    "© 2026 | Python • Streamlit • SQLite • Plotly • Scikit-learn"
+st.markdown("---")
+
+st.markdown(
+    """
+    <div style="text-align:center; color:gray; font-size:14px;">
+        © 2026 <b>Analisis Pola Transaksi Shopee Food</b><br>
+        Metode K-Means Clustering • Python • Streamlit • SQLite • Plotly • Scikit-learn
+    </div>
+    """,
+    unsafe_allow_html=True
 )
-```
