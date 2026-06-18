@@ -20,6 +20,64 @@ st.set_page_config(
 create_table()
 
 # =====================================================
+# SIDEBAR MODERN
+# =====================================================
+
+with st.sidebar:
+
+    # Logo
+    st.image(
+        "assets/logo.png",
+        use_container_width=True
+    )
+
+    st.markdown("## 🍽️ Shopee Food Analytics")
+
+    st.caption(
+        "Analisis Pola Transaksi Menggunakan Metode K-Means Clustering"
+    )
+
+    st.divider()
+
+    st.markdown("""
+### 📚 Metode yang Digunakan
+
+- 🤖 K-Means Clustering
+- 📊 StandardScaler
+- 📈 Elbow Method
+- 📉 Silhouette Score
+""")
+
+    st.divider()
+
+    st.markdown("""
+### 🎯 Interpretasi Cluster
+
+🟢 **Cluster 1**
+- Pola Pemesanan Personal
+
+🔵 **Cluster 2**
+- Pola Pemesanan Reguler
+
+🟣 **Cluster 3**
+- Pola Pemesanan Kelompok
+""")
+
+    st.divider()
+
+    st.info("""
+👨‍🎓 **Penelitian Skripsi**
+
+Analisis Pola Transaksi Shopee Food Berdasarkan Data Pemesanan pada Toko Buffet The Padang Pasir.
+""")
+
+    st.divider()
+
+    st.caption(
+        "© 2026\nUniversitas Putra Indonesia YPTK Padang"
+    )
+
+# =====================================================
 # LOAD CSS
 # =====================================================
 
