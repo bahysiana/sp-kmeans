@@ -218,4 +218,3 @@ st.divider()
 st.caption(
     "© 2026 | Dashboard Analisis Shopee Food Menggunakan Metode K-Means Clustering"
 )
-```
