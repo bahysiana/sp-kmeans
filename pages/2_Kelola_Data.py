@@ -75,11 +75,46 @@ if uploaded_file is not None:
 
     try:
 
-        preview = pd.read_csv(uploaded_file)
+        # ==============================
+        # BACA CSV OTOMATIS
+        # ==============================
 
-        st.success(
-            "File berhasil dibaca."
+        preview = pd.read_csv(
+            uploaded_file,
+            sep=";"
         )
+
+        # ==============================
+        # NORMALISASI NAMA KOLOM
+        # ==============================
+
+        preview.columns = (
+            preview.columns
+            .str.strip()
+            .str.replace(" ", "_")
+        )
+
+        # Rename jika diperlukan
+        rename_dict = {
+            "menu_yang_dibeli": "menu_yang_dibeli",
+            "menu_yang_dibeli_": "menu_yang_dibeli",
+            "menu_yang_dibeli__": "menu_yang_dibeli",
+            "menu_yang_dibeli___": "menu_yang_dibeli",
+        }
+
+        preview.rename(
+            columns=rename_dict,
+            inplace=True
+        )
+
+        # Hapus kolom "no" jika ada
+        if "no" in preview.columns:
+            preview.drop(
+                columns=["no"],
+                inplace=True
+            )
+
+        st.success("✅ File berhasil dibaca.")
 
         st.dataframe(
             preview.head(),
@@ -87,9 +122,9 @@ if uploaded_file is not None:
             hide_index=True
         )
 
-        c1, c2 = st.columns(2)
+        col1, col2 = st.columns(2)
 
-        with c1:
+        with col1:
 
             if st.button(
                 "➕ Tambahkan ke Database",
@@ -99,12 +134,12 @@ if uploaded_file is not None:
                 import_csv(preview)
 
                 st.success(
-                    "Data berhasil ditambahkan."
+                    "✅ Data berhasil ditambahkan ke database."
                 )
 
                 st.rerun()
 
-        with c2:
+        with col2:
 
             if st.button(
                 "♻️ Ganti Seluruh Data",
@@ -116,16 +151,16 @@ if uploaded_file is not None:
                 import_csv(preview)
 
                 st.success(
-                    "Database berhasil diganti."
+                    "✅ Database berhasil diganti."
                 )
 
                 st.rerun()
 
     except Exception as e:
 
-        st.error(e)
-
-st.divider()
+        st.error(
+            f"❌ Gagal membaca file CSV: {e}"
+        )
 
 # =====================================================
 # FORM TAMBAH DATA
