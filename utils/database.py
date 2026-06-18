@@ -13,20 +13,13 @@ DB_PATH = DATABASE_FOLDER / "shopee_food.db"
 
 
 # =====================================================
-# KONEKSI DATABASE
+# KONEKSI DATABASE + AUTO CREATE TABLE
 # =====================================================
 
 def get_connection():
-    return sqlite3.connect(DB_PATH)
 
+    conn = sqlite3.connect(DB_PATH)
 
-# =====================================================
-# MEMBUAT TABEL
-# =====================================================
-
-def create_table():
-
-    conn = get_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -56,6 +49,18 @@ def create_table():
     """)
 
     conn.commit()
+
+    return conn
+
+
+# =====================================================
+# MEMBUAT TABEL
+# =====================================================
+
+def create_table():
+
+    conn = get_connection()
+
     conn.close()
 
 
@@ -67,17 +72,36 @@ def get_all_data():
 
     conn = get_connection()
 
-    df = pd.read_sql_query(
+    try:
 
-        """
-        SELECT *
-        FROM transaksi
-        ORDER BY id ASC
-        """,
+        df = pd.read_sql_query(
 
-        conn
+            """
+            SELECT *
+            FROM transaksi
+            ORDER BY id ASC
+            """,
 
-    )
+            conn
+
+        )
+
+    except Exception:
+
+        df = pd.DataFrame(
+            columns=[
+                "id",
+                "username",
+                "menu_yang_dibeli",
+                "Total_harga",
+                "harga_per_menu",
+                "Jumlah_pesanan",
+                "rata_rata_harga",
+                "waktu_persiapan_yang_diberikan",
+                "waktu_persiapan_digunakan",
+                "waktu_pesan"
+            ]
+        )
 
     conn.close()
 
@@ -111,13 +135,14 @@ def count_data():
 
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
 
+        """
         SELECT COUNT(*)
-
         FROM transaksi
+        """
 
-    """)
+    )
 
     total = cursor.fetchone()[0]
 
@@ -133,21 +158,13 @@ def count_data():
 def insert_data(
 
     username,
-
     menu_yang_dibeli,
-
     Total_harga,
-
     harga_per_menu,
-
     Jumlah_pesanan,
-
     rata_rata_harga,
-
     waktu_persiapan_yang_diberikan,
-
     waktu_persiapan_digunakan,
-
     waktu_pesan
 
 ):
@@ -156,8 +173,9 @@ def insert_data(
 
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
 
+        """
         INSERT INTO transaksi (
 
             username,
@@ -181,30 +199,34 @@ def insert_data(
         )
 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
 
-    """, (
+        (
 
-        username,
+            username,
 
-        menu_yang_dibeli,
+            menu_yang_dibeli,
 
-        Total_harga,
+            Total_harga,
 
-        harga_per_menu,
+            harga_per_menu,
 
-        Jumlah_pesanan,
+            Jumlah_pesanan,
 
-        rata_rata_harga,
+            rata_rata_harga,
 
-        waktu_persiapan_yang_diberikan,
+            waktu_persiapan_yang_diberikan,
 
-        waktu_persiapan_digunakan,
+            waktu_persiapan_digunakan,
 
-        waktu_pesan
+            waktu_pesan
 
-    ))
+        )
+
+    )
 
     conn.commit()
+
     conn.close()
 
 
@@ -215,23 +237,14 @@ def insert_data(
 def update_data(
 
     id_data,
-
     username,
-
     menu_yang_dibeli,
-
     Total_harga,
-
     harga_per_menu,
-
     Jumlah_pesanan,
-
     rata_rata_harga,
-
     waktu_persiapan_yang_diberikan,
-
     waktu_persiapan_digunakan,
-
     waktu_pesan
 
 ):
@@ -240,62 +253,67 @@ def update_data(
 
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
 
+        """
         UPDATE transaksi
 
         SET
 
-            username = ?,
+            username=?,
 
-            menu_yang_dibeli = ?,
+            menu_yang_dibeli=?,
 
-            Total_harga = ?,
+            Total_harga=?,
 
-            harga_per_menu = ?,
+            harga_per_menu=?,
 
-            Jumlah_pesanan = ?,
+            Jumlah_pesanan=?,
 
-            rata_rata_harga = ?,
+            rata_rata_harga=?,
 
-            waktu_persiapan_yang_diberikan = ?,
+            waktu_persiapan_yang_diberikan=?,
 
-            waktu_persiapan_digunakan = ?,
+            waktu_persiapan_digunakan=?,
 
-            waktu_pesan = ?
+            waktu_pesan=?
 
-        WHERE id = ?
+        WHERE id=?
+        """,
 
-    """, (
+        (
 
-        username,
+            username,
 
-        menu_yang_dibeli,
+            menu_yang_dibeli,
 
-        Total_harga,
+            Total_harga,
 
-        harga_per_menu,
+            harga_per_menu,
 
-        Jumlah_pesanan,
+            Jumlah_pesanan,
 
-        rata_rata_harga,
+            rata_rata_harga,
 
-        waktu_persiapan_yang_diberikan,
+            waktu_persiapan_yang_diberikan,
 
-        waktu_persiapan_digunakan,
+            waktu_persiapan_digunakan,
 
-        waktu_pesan,
+            waktu_pesan,
 
-        id_data
+            id_data
 
-    ))
+        )
+
+    )
 
     conn.commit()
+
     conn.close()
 
 
 # =====================================================
-# HAPUS DATA
+# DELETE DATA
 # =====================================================
 
 def delete_data(id_data):
@@ -307,11 +325,8 @@ def delete_data(id_data):
     cursor.execute(
 
         """
-
         DELETE FROM transaksi
-
-        WHERE id = ?
-
+        WHERE id=?
         """,
 
         (id_data,)
@@ -319,6 +334,7 @@ def delete_data(id_data):
     )
 
     conn.commit()
+
     conn.close()
 
 
@@ -358,61 +374,14 @@ def truncate_table():
     cursor.execute(
 
         """
-
         DELETE FROM transaksi
-
-        """
-
-    )
-
-    conn.commit()
-    conn.close()
-
-
-# =====================================================
-# GANTI SELURUH DATA
-# =====================================================
-
-def replace_all_data(df):
-
-    conn = get_connection()
-
-    cursor = conn.cursor()
-
-    cursor.execute(
-
-        """
-
-        DELETE FROM transaksi
-
         """
 
     )
 
     conn.commit()
 
-    df.to_sql(
-
-        "transaksi",
-
-        conn,
-
-        if_exists="append",
-
-        index=False
-
-    )
-
     conn.close()
-
-
-# =====================================================
-# SIMPAN DATAFRAME
-# =====================================================
-
-def save_dataframe(df):
-
-    replace_all_data(df)
 
 
 # =====================================================
@@ -425,7 +394,27 @@ def export_dataframe():
 
 
 # =====================================================
-# INISIALISASI DATABASE
+# GANTI SELURUH DATA
+# =====================================================
+
+def replace_all_data(df):
+
+    truncate_table()
+
+    import_csv(df)
+
+
+# =====================================================
+# SIMPAN DATAFRAME
+# =====================================================
+
+def save_dataframe(df):
+
+    replace_all_data(df)
+
+
+# =====================================================
+# INISIALISASI
 # =====================================================
 
 create_table()
