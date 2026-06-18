@@ -29,7 +29,7 @@ with st.sidebar:
    st.sidebar.image(
     "assets/logo.png",
     width=140
-    )
+        )
     )
 
     st.markdown("## 🍽️ Shopee Food Analytics")
