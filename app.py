@@ -27,7 +27,7 @@ with st.sidebar:
 
     # Logo
     st.image(
-        "assets/logo.png",
+        "assets/tes.png",
         use_container_width=True
     )
 
