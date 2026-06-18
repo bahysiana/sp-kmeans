@@ -142,6 +142,7 @@ if st.button(
     st.session_state["hasil_cluster"] = hasil
     st.session_state["cluster_summary"] = summary
     st.session_state["centroid"] = centroid
+    st.session_state["k_value"] = 3
 
     st.success("✅ Proses clustering berhasil dilakukan.")
 
