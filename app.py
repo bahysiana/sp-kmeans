@@ -1,4 +1,3 @@
-```python
 import streamlit as st
 from pathlib import Path
 from utils.database import create_table
@@ -86,4 +85,3 @@ st.divider()
 st.caption(
     "© 2026 | Analisis Pola Transaksi Shopee Food Menggunakan Metode K-Means Clustering"
 )
-```
